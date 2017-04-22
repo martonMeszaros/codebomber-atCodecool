@@ -34,7 +34,7 @@ class GenerateWalls(object):
     n_of_steps = 5
     step = 1
 
-    def gen_permawalls(world, window, sprite_factory):
+    def __gen_permawalls(world, window, sprite_factory):
         """Generate outer and inner walls that can't be destroyed."""
         # Compensate for coords starting with 0
         offset = 1
@@ -63,7 +63,7 @@ class GenerateWalls(object):
                         Color.wall_permanent, (Wall.size[0], Wall.size[1]))
                     Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
 
-    def gen_wall(world, window, sprite_factory):
+    def __gen_wall(world, window, sprite_factory):
         """Generate destroyable walls in every blank space."""
         offset = 1
 
@@ -76,7 +76,7 @@ class GenerateWalls(object):
                     Wall.destroyable_walls.append(
                         Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1]))
 
-    def remove_from_playerpos(n_of_players):
+    def __remove_from_playerpos(n_of_players):
         """Remove 3 walls from every players starting position."""
         # At least 2 players are always playing.
         # Should be made scalable with different size of map layouts.
@@ -113,14 +113,14 @@ class GenerateWalls(object):
             Wall.destroyable_walls.remove(wall)
             wall.delete()
 
-    def remove_from_random():
+    def __remove_from_random():
         """Remove walls from random positions."""
         for i in range(Wall.n_to_remove):
             selected_wall = random.choice(Wall.destroyable_walls)
             Wall.destroyable_walls.remove(selected_wall)
             selected_wall.delete()
 
-    def gen_powerup(world, window, sprite_factory):
+    def __gen_powerup(world, window, sprite_factory):
         """Replace some of the remaining walls with powerups."""
         Powerup.reset_remaining_powerups()
         new_walls = []
@@ -158,15 +158,15 @@ class GenerateWalls(object):
                 for wall in Wall.destroyable_walls:
                     wall.delete()
                 Wall.destroyable_walls = []
-            GenerateWalls.gen_permawalls(world, window, sprite_factory)
+            GenerateWalls.__gen_permawalls(world, window, sprite_factory)
         elif GenerateWalls.step == 2:
-            GenerateWalls.gen_wall(world, window, sprite_factory)
+            GenerateWalls.__gen_wall(world, window, sprite_factory)
         elif GenerateWalls.step == 3:
-            GenerateWalls.remove_from_playerpos(n_of_players)
+            GenerateWalls.__remove_from_playerpos(n_of_players)
         elif GenerateWalls.step == 4:
-            GenerateWalls.remove_from_random()
+            GenerateWalls.__remove_from_random()
         elif GenerateWalls.step == 5:
-            GenerateWalls.gen_powerup(world, window, sprite_factory)
+            GenerateWalls.__gen_powerup(world, window, sprite_factory)
 
         if GenerateWalls.step < GenerateWalls.n_of_steps:
             GenerateWalls.step += 1
@@ -178,8 +178,9 @@ class GenerateWalls(object):
         for wall in Wall.destroyable_walls:
             wall.delete()
         Wall.destroyable_walls = []
-        GenerateWalls.gen_permawalls(world, window, sprite_factory)
-        GenerateWalls.gen_wall(world, window, sprite_factory)
-        GenerateWalls.remove_from_playerpos(n_of_players)
-        GenerateWalls.remove_from_random()
-        GenerateWalls.gen_powerup(world, window, sprite_factory)
+        GenerateWalls.__gen_permawalls(world, window, sprite_factory)
+        GenerateWalls.__gen_wall(world, window, sprite_factory)
+        GenerateWalls.__remove_from_playerpos(n_of_players)
+        GenerateWalls.__remove_from_random()
+        GenerateWalls.__gen_powerup(world, window, sprite_factory)
+        GenerateWalls.step = 1
