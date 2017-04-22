@@ -2,6 +2,8 @@
 # import sdl2
 import sdl2.ext
 
+from common import Data
+
 
 class PowerupData(object):
     """Handle data associated with a powerup."""
@@ -11,15 +13,11 @@ class PowerupData(object):
 
 
 class Powerup(sdl2.ext.Entity):
-    bombcount = 0
-    power = 1
-    speed = 2
-
-    n_of_powerup_per_type = 6
+    """."""
     remaining_powerups = []
 
     def reset_remaining_powerups():
-        for i in range(Powerup.n_of_powerup_per_type):
-            Powerup.remaining_powerups.append(Powerup.bombcount)
-            Powerup.remaining_powerups.append(Powerup.power)
-            Powerup.remaining_powerups.append(Powerup.speed)
+        for i in range(Data.n_of_powerups_per_type_per_player * Data.n_of_players):
+            Powerup.remaining_powerups.append(Data.powerup_bombcount)
+            Powerup.remaining_powerups.append(Data.powerup_power)
+            Powerup.remaining_powerups.append(Data.powerup_speed)

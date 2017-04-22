@@ -2,7 +2,7 @@
 # import sdl2
 import sdl2.ext
 
-from powerup import Powerup
+from common import Data
 
 
 class PlayerData(object):
@@ -35,18 +35,16 @@ class PlayerData(object):
         """Change one of the players' data depending
         on what kind of powerup they picked up.
         """
-        if powerup_type == Powerup.bombcount:
+        if powerup_type == Data.powerup_bombcount:
             self.bombcount += PlayerData.powerup_bombcount
-        elif powerup_type == Powerup.power:
+        elif powerup_type == Data.powerup_power:
             self.power += PlayerData.powerup_power
-        elif powerup_type == Powerup.speed:
+        elif powerup_type == Data.powerup_speed:
             self.speed += PlayerData.powerup_speed
 
 
 class Player(sdl2.ext.Entity):
     """."""
-    count = 2
-
     def __init__(self, world, sprite, posx=0, posy=0, is_ai=False):
         self.sprite = sprite
         self.sprite.position = posx, posy

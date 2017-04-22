@@ -3,21 +3,20 @@ import sys
 import sdl2
 import sdl2.ext
 
-from common import Color
 import game_sys
+from common import Data
 from player import Player
 from wall import GenerateWalls, Wall
 
 
 def main():
-    # Set player count based on the first argument passed
-    if len(sys.argv) > 1:
-        Player.count = int(sys.argv[1])
+    # Set individual class sprite sizes based on Data.sprite_size
+    Wall.size = Data.sprite_size
 
     # Initialize sdl2, window, and world
     sdl2.ext.init()
     window = sdl2.ext.Window(
-        "Codebomber", (15 * Wall.size[0], 13 * Wall.size[1]))
+        "Codebomber", (Data.map_size[0] * Wall.size[0], Data.map_size[1] * Wall.size[1]))
     window.show()
     world = sdl2.ext.World()
 
@@ -44,10 +43,10 @@ def main():
                     break
                 # S pressed - generate step
                 if event.key.keysym.sym == sdl2.SDLK_s:
-                    GenerateWalls.generate_step(world, window, sprite_factory, Player.count)
+                    GenerateWalls.generate_step(world, window, sprite_factory, Data.n_of_players)
                 # N pressed - generate new map
                 if event.key.keysym.sym == sdl2.SDLK_n:
-                    GenerateWalls.generate_map(world, window, sprite_factory, Player.count)
+                    GenerateWalls.generate_map(world, window, sprite_factory, Data.n_of_players)
 
         world.process()
 
