@@ -2,6 +2,8 @@
 # import sdl2
 import sdl2.ext
 
+from powerup import Powerup
+
 
 class PlayerData(object):
     """Handle data associated with a player. This includes:
@@ -12,10 +14,10 @@ class PlayerData(object):
     base_bombcount = 1
     base_power = 2
     base_speed = 1
-    number = 1
     powerup_bombcount = 1
     powerup_power = 1
     powerup_speed = 1
+    number = 1
 
     def __init__(self, is_ai):
         # The commented out line is used in the pong tutorial, not sure why.
@@ -30,14 +32,14 @@ class PlayerData(object):
         PlayerData.number += 1
 
     def powerup(self, powerup_type):
-        """Change one of the players' data depengint
+        """Change one of the players' data depending
         on what kind of powerup they picked up.
         """
-        if powerup_type == 0:
+        if powerup_type == Powerup.bombcount:
             self.bombcount += PlayerData.powerup_bombcount
-        elif powerup_type == 1:
+        elif powerup_type == Powerup.power:
             self.power += PlayerData.powerup_power
-        elif powerup_type == 0:
+        elif powerup_type == Powerup.speed:
             self.speed += PlayerData.powerup_speed
 
 
