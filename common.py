@@ -1,4 +1,4 @@
-"""Constants and commonly used functions."""
+"""Commonly used variables and functions."""
 # import sdl2
 import sdl2.ext
 
