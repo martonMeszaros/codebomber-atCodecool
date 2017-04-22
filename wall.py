@@ -4,7 +4,7 @@ import random
 # import sdl2
 import sdl2.ext
 
-from common import Color
+from common import Color, Data
 from powerup import Powerup
 
 
@@ -18,8 +18,7 @@ class WallData(object):
 
 class Wall(sdl2.ext.Entity):
     """."""
-    n_to_remove = 9
-    size = (48, 48)
+    size = Data.sprite_size
     destroyable_walls = []
 
     def __init__(self, world, sprite, posx=0, posy=0, is_powerup=False):
@@ -39,9 +38,9 @@ class GenerateWalls(object):
         # Compensate for coords starting with 0
         offset = 1
 
-        # Generate outer walls
         for y in range(0, window.size[1] // Wall.size[1]):
             for x in range(0, window.size[0] // Wall.size[0]):
+                # Generate outer walls
                 if (
                         # Top most or left most walls
                         x == 0 or y == 0 or
@@ -53,12 +52,8 @@ class GenerateWalls(object):
                         Color.wall_permanent, (Wall.size[0], Wall.size[1])
                     )
                     Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
-
-        # Generate inner walls
-        for y in range(offset, window.size[1] // Wall.size[1] - (offset*2)):
-            for x in range(offset, window.size[0] // Wall.size[0] - (offset*2)):
-                # Only at every second x and y coordinate
-                if x % 2 == 0 and y % 2 == 0:
+                # Generate inner walls
+                elif x % 2 == 0 and y % 2 == 0:
                     wall_sprite = sprite_factory.from_color(
                         Color.wall_permanent, (Wall.size[0], Wall.size[1]))
                     Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
@@ -80,28 +75,29 @@ class GenerateWalls(object):
         """Remove 3 walls from every players starting position."""
         # At least 2 players are always playing.
         # Should be made scalable with different size of map layouts.
+        offset = 2
         playerpos = [
             (1 * Wall.size[0], 1 * Wall.size[1]),
             (1 * Wall.size[0], 2 * Wall.size[1]),
             (2 * Wall.size[0], 1 * Wall.size[1]),
-            (13 * Wall.size[0], 11 * Wall.size[1]),
-            (13 * Wall.size[0], 10 * Wall.size[1]),
-            (12 * Wall.size[0], 11 * Wall.size[1])
+            ((Data.map_size[0] - offset) * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]),
+            ((Data.map_size[0] - offset) * Wall.size[0], (Data.map_size[1] - offset - 1) * Wall.size[1]),
+            ((Data.map_size[0] - offset - 1) * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]),
         ]
         if n_of_players > 2:
             playerpos.append(
-                (13 * Wall.size[0], 1 * Wall.size[1]))
+                ((Data.map_size[0] - offset) * Wall.size[0], 1 * Wall.size[1]))
             playerpos.append(
-                (13 * Wall.size[0], 2 * Wall.size[1]))
+                ((Data.map_size[0] - offset) * Wall.size[0], 2 * Wall.size[1]))
             playerpos.append(
-                (12 * Wall.size[0], 1 * Wall.size[1]))
+                ((Data.map_size[0] - offset - 1) * Wall.size[0], 1 * Wall.size[1]))
             if n_of_players > 3:
                 playerpos.append(
-                    (1 * Wall.size[0], 11 * Wall.size[1]))
+                    (1 * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]))
                 playerpos.append(
-                    (1 * Wall.size[0], 10 * Wall.size[1]))
+                    (1 * Wall.size[0], (Data.map_size[1] - offset - 1) * Wall.size[1]))
                 playerpos.append(
-                    (2 * Wall.size[0], 11 * Wall.size[1]))
+                    (2 * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]))
 
         walls_to_remove = []
         # Check wall positions in Wall.destroyable_walls
@@ -115,7 +111,7 @@ class GenerateWalls(object):
 
     def __remove_from_random():
         """Remove walls from random positions."""
-        for i in range(Wall.n_to_remove):
+        for i in range(Data.n_of_random_holes):
             selected_wall = random.choice(Wall.destroyable_walls)
             Wall.destroyable_walls.remove(selected_wall)
             selected_wall.delete()
@@ -135,13 +131,13 @@ class GenerateWalls(object):
             powerup_type = random.choice(Powerup.remaining_powerups)
             Powerup.remaining_powerups.remove(powerup_type)
             # Set proper sprite color - temporary
-            if powerup_type == Powerup.bombcount:
+            if powerup_type == Data.powerup_bombcount:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_bombcount, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Powerup.power:
+            elif powerup_type == Data.powerup_power:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_power, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Powerup.speed:
+            elif powerup_type == Data.powerup_speed:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_speed, (Wall.size[0], Wall.size[1]))
             # Create the new wall
