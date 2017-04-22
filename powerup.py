@@ -6,6 +6,7 @@ import sdl2.ext
 class PowerupData(object):
     """Handle data associated with a powerup."""
     def __init__(self):
+        # super(PowerupData, self).__init__()
         self.type = None
 
 
