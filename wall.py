@@ -19,7 +19,7 @@ class WallData(object):
 class Wall(sdl2.ext.Entity):
     """."""
     n_to_remove = 9
-    size = (32, 32)
+    size = (48, 48)
     destroyable_walls = []
 
     def __init__(self, world, sprite, posx=0, posy=0, is_powerup=False):
@@ -32,7 +32,7 @@ class Wall(sdl2.ext.Entity):
 class GenerateWalls(object):
     """Holds all functions of generating a map."""
     n_of_steps = 5
-    step = 0
+    step = 1
 
     def gen_permawalls(world, window, sprite_factory):
         """Generate outer and inner walls that can't be destroyed."""
@@ -78,36 +78,40 @@ class GenerateWalls(object):
 
     def remove_from_playerpos(n_of_players):
         """Remove 3 walls from every players starting position."""
-        offset = 1
         # At least 2 players are always playing.
+        # Should be made scalable with different size of map layouts.
         playerpos = [
-            (Wall.size[0] * (offset * 1), Wall.size[1] * (offset * 1))
-            (Wall.size[0] * (offset * 2), Wall.size[1] * (offset * 1))
-            (Wall.size[0] * (offset * 1), Wall.size[1] * (offset * 2))
-            (Wall.size[0] * (offset * 13), Wall.size[1] * (offset * 11))
-            (Wall.size[0] * (offset * 12), Wall.size[1] * (offset * 11))
-            (Wall.size[0] * (offset * 13), Wall.size[1] * (offset * 10))
+            (1 * Wall.size[0], 1 * Wall.size[1]),
+            (1 * Wall.size[0], 2 * Wall.size[1]),
+            (2 * Wall.size[0], 1 * Wall.size[1]),
+            (13 * Wall.size[0], 11 * Wall.size[1]),
+            (13 * Wall.size[0], 10 * Wall.size[1]),
+            (12 * Wall.size[0], 11 * Wall.size[1])
         ]
         if n_of_players > 2:
             playerpos.append(
-                (Wall.size[0] * (offset * 1), Wall.size[1] * (offset * 11)))
+                (13 * Wall.size[0], 1 * Wall.size[1]))
             playerpos.append(
-                (Wall.size[0] * (offset * 2), Wall.size[1] * (offset * 11)))
+                (13 * Wall.size[0], 2 * Wall.size[1]))
             playerpos.append(
-                (Wall.size[0] * (offset * 1), Wall.size[1] * (offset * 10)))
+                (12 * Wall.size[0], 1 * Wall.size[1]))
             if n_of_players > 3:
                 playerpos.append(
-                    (Wall.size[0] * (offset * 13), Wall.size[1] * (offset * 1)))
+                    (1 * Wall.size[0], 11 * Wall.size[1]))
                 playerpos.append(
-                    (Wall.size[0] * (offset * 12), Wall.size[1] * (offset * 1)))
+                    (1 * Wall.size[0], 10 * Wall.size[1]))
                 playerpos.append(
-                    (Wall.size[0] * (offset * 13), Wall.size[1] * (offset * 2)))
+                    (2 * Wall.size[0], 11 * Wall.size[1]))
 
+        walls_to_remove = []
         # Check wall positions in Wall.destroyable_walls
         for wall in Wall.destroyable_walls:
-            if wall.sprite.position in player_starter_positions:
-                Wall.destroyable_walls.remove(wall)
-                wall.delete()
+            if wall.sprite.position in playerpos:
+                walls_to_remove.append(wall)
+
+        for wall in walls_to_remove:
+            Wall.destroyable_walls.remove(wall)
+            wall.delete()
 
     def remove_from_random():
         """Remove walls from random positions."""
@@ -149,25 +153,25 @@ class GenerateWalls(object):
 
     def generate_step(world, window, sprite_factory, n_of_players=2):
         """Execute a single phase of map generation."""
-        if GenerateWalls.step == 0:
+        if GenerateWalls.step == 1:
             if len(Wall.destroyable_walls) > 0:
                 for wall in Wall.destroyable_walls:
                     wall.delete()
                 Wall.destroyable_walls = []
             GenerateWalls.gen_permawalls(world, window, sprite_factory)
-        elif GenerateWalls.step == 1:
-            GenerateWalls.gen_wall(world, window, sprite_factory)
         elif GenerateWalls.step == 2:
-            GenerateWalls.remove_from_playerpos(n_of_players)
+            GenerateWalls.gen_wall(world, window, sprite_factory)
         elif GenerateWalls.step == 3:
-            GenerateWalls.remove_from_random()
+            GenerateWalls.remove_from_playerpos(n_of_players)
         elif GenerateWalls.step == 4:
+            GenerateWalls.remove_from_random()
+        elif GenerateWalls.step == 5:
             GenerateWalls.gen_powerup(world, window, sprite_factory)
 
-        if GenerateWalls.step > GenerateWalls.n_of_steps:
+        if GenerateWalls.step < GenerateWalls.n_of_steps:
             GenerateWalls.step += 1
         else:
-            GenerateWalls.step = 0
+            GenerateWalls.step = 1
 
     def generate_map(world, window, sprite_factory, n_of_players=2):
         """Execute all steps of world generation."""
