@@ -1,5 +1,4 @@
 """."""
-# import sdl2
 import sdl2.ext
 
 from common import Data
@@ -22,6 +21,12 @@ class PlayerData(object):
     def __init__(self, is_ai):
         # The commented out line is used in the pong tutorial, not sure why.
         # super(PlayerData, self).__init__()
+        self.key_up = None
+        self.key_right = None
+        self.key_down = None
+        self.key_left = None
+        self.key_bomb = None
+
         self.bombcount = PlayerData.base_bombcount
         self.bombs_placed = 0
         self.power = PlayerData.base_power
@@ -35,17 +40,18 @@ class PlayerData(object):
         """Change one of the players' data depending
         on what kind of powerup they picked up.
         """
-        if powerup_type == Data.powerup_bombcount:
-            self.bombcount += PlayerData.powerup_bombcount
-        elif powerup_type == Data.powerup_power:
-            self.power += PlayerData.powerup_power
-        elif powerup_type == Data.powerup_speed:
-            self.speed += PlayerData.powerup_speed
+        if powerup_type == Data.id_bombcount:
+            self.bombcount += PlayerData.id_bombcount
+        elif powerup_type == Data.id_power:
+            self.power += PlayerData.id_power
+        elif powerup_type == Data.id_speed:
+            self.speed += PlayerData.id_speed
 
 
 class Player(sdl2.ext.Entity):
     """."""
-    def __init__(self, world, sprite, posx=0, posy=0, is_ai=False):
+    def __init__(self, world, sprite, pos, is_ai=False):
+        """."""
         self.sprite = sprite
-        self.sprite.position = posx, posy
+        self.sprite.position = pos
         self.playerdata = PlayerData(is_ai)

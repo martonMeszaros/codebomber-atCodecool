@@ -18,6 +18,6 @@ class Powerup(sdl2.ext.Entity):
 
     def reset_remaining_powerups():
         for i in range(Data.n_of_powerups_per_type_per_player * Data.n_of_players):
-            Powerup.remaining_powerups.append(Data.powerup_bombcount)
-            Powerup.remaining_powerups.append(Data.powerup_power)
-            Powerup.remaining_powerups.append(Data.powerup_speed)
+            Powerup.remaining_powerups.append(Data.id_bombcount)
+            Powerup.remaining_powerups.append(Data.id_power)
+            Powerup.remaining_powerups.append(Data.id_speed)

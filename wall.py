@@ -131,13 +131,13 @@ class GenerateWalls(object):
             powerup_type = random.choice(Powerup.remaining_powerups)
             Powerup.remaining_powerups.remove(powerup_type)
             # Set proper sprite color - temporary
-            if powerup_type == Data.powerup_bombcount:
+            if powerup_type == Data.id_bombcount:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_bombcount, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Data.powerup_power:
+            elif powerup_type == Data.id_power:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_power, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Data.powerup_speed:
+            elif powerup_type == Data.id_speed:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_speed, (Wall.size[0], Wall.size[1]))
             # Create the new wall

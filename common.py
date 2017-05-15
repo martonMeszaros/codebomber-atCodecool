@@ -20,20 +20,22 @@ class Color(object):
 class Data(object):
     """Stores data to fix import issues when files import each other."""
     map_size = (15, 13)
+    sprite_size = (32, 32)
+
     n_of_players = 2
     n_of_powerups_per_type_per_player = 3
     n_of_random_holes = 9
-    # Powerup types can't start with 0, because
+
+    # Powerup id's can't start with 0, because
     # this data is used to check if a powerup should
-    # spawn when blowing up a wall.
-    powerup_bombcount = 1
-    powerup_power = 2
-    powerup_speed = 3
-    sprite_size = (32, 32)
+    # spawn when blowing up a wall,
+    # 0 would default to False.
+    id_bombcount = 1
+    id_power = 2
+    id_speed = 3
 
     def __set_map_size(x, y):
         pass
 
-    def set_sprite_size(n):
-        """Set Data.sprite_size to (n, n)"""
-        Data.sprite_size = (n, n)
+    def __set_sprite_size(n):
+        pass
