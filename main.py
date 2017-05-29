@@ -1,5 +1,5 @@
 import sys
-import json
+import time
 
 import sdl2
 import sdl2.ext
@@ -11,8 +11,8 @@ from wall import GenerateWalls, Wall
 from bomb import Bomb
 
 
-def game_tick(bomb):
-    bomb.sprite.position = (bomb.sprite.position[0] + 20, bomb.sprite.position[1])
+def game_tick(data, time_diff):
+    data.sprite.position = (data.sprite.position[0] + 20, data.sprite.position[1])
 
 
 def main():
@@ -33,10 +33,13 @@ def main():
 
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
 
-    game_timer = game_sys.PeriodicTimer(1, game_tick, None)
-
+    last_time = time.perf_counter()
     running = True
     while running:
+        current_time = time.perf_counter()
+        time_diff = current_time - last_time
+        last_time = current_time
+        game_tick(None, time_diff)
         # Event handling
         events = sdl2.ext.get_events()
         for event in events:
@@ -57,11 +60,9 @@ def main():
                 if event.key.keysym.sym == sdl2.SDLK_n:
                     GenerateWalls.generate_map(world, window, sprite_factory, config.number_of_players)
                 if event.key.keysym.sym == sdl2.SDLK_b:
-                    test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), 0)
-                    game_timer.args = [test_bomb]
-                    game_timer.start()
+                    pass
                 if event.key.keysym.sym == sdl2.SDLK_v:
-                    game_timer.stop()
+                    pass
 
         world.process()
 
