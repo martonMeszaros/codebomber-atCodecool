@@ -1,14 +1,14 @@
 import sys
+import json
 
 import sdl2
 import sdl2.ext
 
 import game_sys
-from common import Data, Color
+from common import Color
 from player import Player
 from wall import GenerateWalls, Wall
 from bomb import Bomb
-from periodic_timer import PeriodicTimer
 
 
 def game_tick(bomb):
@@ -16,13 +16,14 @@ def game_tick(bomb):
 
 
 def main():
+    config = game_sys.config
     # Set individual class sprite sizes based on Data.sprite_size
-    Wall.size = Data.sprite_size
+    Wall.size = config.sprite_size
 
     # Initialize sdl2, window, and world
     sdl2.ext.init()
     window = sdl2.ext.Window(
-        "Codebomber", (Data.map_size[0] * Wall.size[0], Data.map_size[1] * Wall.size[1]))
+        "Codebomber", (config.map_size[0] * Wall.size[0], config.map_size[1] * Wall.size[1]))
     window.show()
     world = sdl2.ext.World()
 
@@ -32,7 +33,7 @@ def main():
 
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
 
-    game_timer = PeriodicTimer(1, game_tick, None)
+    game_timer = game_sys.PeriodicTimer(1, game_tick, None)
 
     running = True
     while running:
@@ -51,12 +52,12 @@ def main():
                     break
                 # S pressed - generate step
                 if event.key.keysym.sym == sdl2.SDLK_s:
-                    GenerateWalls.generate_step(world, window, sprite_factory, Data.n_of_players)
+                    GenerateWalls.generate_step(world, window, sprite_factory, config.number_of_players)
                 # N pressed - generate new map
                 if event.key.keysym.sym == sdl2.SDLK_n:
-                    GenerateWalls.generate_map(world, window, sprite_factory, Data.n_of_players)
+                    GenerateWalls.generate_map(world, window, sprite_factory, config.number_of_players)
                 if event.key.keysym.sym == sdl2.SDLK_b:
-                    test_bomb = Bomb(world, sprite_factory.from_color(Color.black, Data.sprite_size), (0, 0), 0)
+                    test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), 0)
                     game_timer.args = [test_bomb]
                     game_timer.start()
                 if event.key.keysym.sym == sdl2.SDLK_v:

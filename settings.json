@@ -1,0 +1,31 @@
+{
+    "player1": {
+        "key_up": "W",
+        "key_right": "D",
+        "key_down": "S",
+        "key_left": "A",
+        "key_bomb": "Left Ctrl" 
+    },
+    "player2": {
+        "key_up": "Up",
+        "key_right": "Right",
+        "key_down": "Down",
+        "key_left": "Left",
+        "key_bomb": "Keypad 0" 
+    },
+    "player3": {
+        "key_up": "W",
+        "key_right": "D",
+        "key_down": "S",
+        "key_left": "A",
+        "key_bomb": "Left Ctrl" 
+    },
+    "player4": {
+        "key_up": "W",
+        "key_right": "D",
+        "key_down": "S",
+        "key_left": "A",
+        "key_bomb": "Left Ctrl" 
+    },
+    "window_size": [800, 600]
+}

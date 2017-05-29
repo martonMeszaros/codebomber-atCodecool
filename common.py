@@ -15,27 +15,3 @@ class Color(object):
     powerup_speed = sdl2.ext.Color(3, 169, 244)     # Light Blue 500
     wall = sdl2.ext.Color(189, 189, 189)            # Grey 400
     wall_permanent = sdl2.ext.Color(117, 117, 117)  # Grey 600
-
-
-class Data(object):
-    """Stores data to fix import issues when files import each other."""
-    map_size = (15, 13)
-    sprite_size = (32, 32)
-
-    n_of_players = 2
-    n_of_powerups_per_type_per_player = 3
-    n_of_random_holes = 9
-
-    # Powerup id's can't start with 0, because
-    # this data is used to check if a powerup should
-    # spawn when blowing up a wall,
-    # 0 would default to False.
-    id_bombcount = 1
-    id_power = 2
-    id_speed = 3
-
-    def __set_map_size(x, y):
-        pass
-
-    def __set_sprite_size(n):
-        pass

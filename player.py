@@ -1,7 +1,7 @@
 """."""
 import sdl2.ext
 
-from common import Data
+import powerup
 
 
 class PlayerData(object):
@@ -18,14 +18,14 @@ class PlayerData(object):
     powerup_speed = 1
     number = 1
 
-    def __init__(self, is_ai):
+    def __init__(self, controls, is_ai):
         # The commented out line is used in the pong tutorial, not sure why.
         # super(PlayerData, self).__init__()
-        self.key_up = None
-        self.key_right = None
-        self.key_down = None
-        self.key_left = None
-        self.key_bomb = None
+        self.key_up = controls["key_up"]
+        self.key_right = controls["key_right"]
+        self.key_down = controls["key_down"]
+        self.key_left = controls["key_left"]
+        self.key_bomb = controls["key_bomb"]
 
         self.bombcount = PlayerData.base_bombcount
         self.bombs_placed = 0
@@ -40,18 +40,18 @@ class PlayerData(object):
         """Change one of the players' data depending
         on what kind of powerup they picked up.
         """
-        if powerup_type == Data.id_bombcount:
+        if powerup_type == powerup.ID_BOMBCOUNT:
             self.bombcount += PlayerData.id_bombcount
-        elif powerup_type == Data.id_power:
+        elif powerup_type == powerup.ID_POWER:
             self.power += PlayerData.id_power
-        elif powerup_type == Data.id_speed:
+        elif powerup_type == powerup.ID_SPEED:
             self.speed += PlayerData.id_speed
 
 
 class Player(sdl2.ext.Entity):
     """."""
-    def __init__(self, world, sprite, pos, is_ai=False):
+    def __init__(self, world, sprite, pos, controls, is_ai=False):
         """."""
         self.sprite = sprite
         self.sprite.position = pos
-        self.playerdata = PlayerData(is_ai)
+        self.playerdata = PlayerData(controls, is_ai)

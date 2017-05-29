@@ -4,8 +4,9 @@ import random
 # import sdl2
 import sdl2.ext
 
-from common import Color, Data
-from powerup import Powerup
+from common import Color
+from game_sys import config
+import powerup
 
 
 class WallData(object):
@@ -18,7 +19,7 @@ class WallData(object):
 
 class Wall(sdl2.ext.Entity):
     """."""
-    size = Data.sprite_size
+    size = config.sprite_size
     destroyable_walls = []
 
     def __init__(self, world, sprite, posx=0, posy=0, is_powerup=False):
@@ -80,24 +81,24 @@ class GenerateWalls(object):
             (1 * Wall.size[0], 1 * Wall.size[1]),
             (1 * Wall.size[0], 2 * Wall.size[1]),
             (2 * Wall.size[0], 1 * Wall.size[1]),
-            ((Data.map_size[0] - offset) * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]),
-            ((Data.map_size[0] - offset) * Wall.size[0], (Data.map_size[1] - offset - 1) * Wall.size[1]),
-            ((Data.map_size[0] - offset - 1) * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]),
+            ((config.map_size[0] - offset) * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]),
+            ((config.map_size[0] - offset) * Wall.size[0], (config.map_size[1] - offset - 1) * Wall.size[1]),
+            ((config.map_size[0] - offset - 1) * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]),
         ]
         if n_of_players > 2:
             playerpos.append(
-                ((Data.map_size[0] - offset) * Wall.size[0], 1 * Wall.size[1]))
+                ((config.map_size[0] - offset) * Wall.size[0], 1 * Wall.size[1]))
             playerpos.append(
-                ((Data.map_size[0] - offset) * Wall.size[0], 2 * Wall.size[1]))
+                ((config.map_size[0] - offset) * Wall.size[0], 2 * Wall.size[1]))
             playerpos.append(
-                ((Data.map_size[0] - offset - 1) * Wall.size[0], 1 * Wall.size[1]))
+                ((config.map_size[0] - offset - 1) * Wall.size[0], 1 * Wall.size[1]))
             if n_of_players > 3:
                 playerpos.append(
-                    (1 * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]))
+                    (1 * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]))
                 playerpos.append(
-                    (1 * Wall.size[0], (Data.map_size[1] - offset - 1) * Wall.size[1]))
+                    (1 * Wall.size[0], (config.map_size[1] - offset - 1) * Wall.size[1]))
                 playerpos.append(
-                    (2 * Wall.size[0], (Data.map_size[1] - offset) * Wall.size[1]))
+                    (2 * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]))
 
         walls_to_remove = []
         # Check wall positions in Wall.destroyable_walls
@@ -111,33 +112,33 @@ class GenerateWalls(object):
 
     def __remove_from_random():
         """Remove walls from random positions."""
-        for i in range(Data.n_of_random_holes):
+        for i in range(config.number_of_random_holes):
             selected_wall = random.choice(Wall.destroyable_walls)
             Wall.destroyable_walls.remove(selected_wall)
             selected_wall.delete()
 
     def __gen_powerup(world, window, sprite_factory):
         """Replace some of the remaining walls with powerups."""
-        Powerup.reset_remaining_powerups()
+        powerup.reset_remaining_powerups()
         new_walls = []
 
-        while len(Powerup.remaining_powerups) > 0:
+        while len(powerup.remaining_powerups) > 0:
             selected_wall = random.choice(Wall.destroyable_walls)
             Wall.destroyable_walls.remove(selected_wall)
             # Save the position of the wall
             position = selected_wall.sprite.position
             selected_wall.delete()
             # Select a powerup type from the remaining
-            powerup_type = random.choice(Powerup.remaining_powerups)
-            Powerup.remaining_powerups.remove(powerup_type)
+            powerup_type = random.choice(powerup.remaining_powerups)
+            powerup.remaining_powerups.remove(powerup_type)
             # Set proper sprite color - temporary
-            if powerup_type == Data.id_bombcount:
+            if powerup_type == powerup.ID_BOMBCOUNT:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_bombcount, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Data.id_power:
+            elif powerup_type == powerup.ID_POWER:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_power, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == Data.id_speed:
+            elif powerup_type == powerup.ID_SPEED:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_speed, (Wall.size[0], Wall.size[1]))
             # Create the new wall
