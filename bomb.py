@@ -1,16 +1,15 @@
 """."""
 import sdl2.ext
-from velocity import Velocity
+from movement import Movement
 
 
 class BombData(object):
     """."""
-    def __init__(self, power, timer, position):
+    def __init__(self, power, timer):
         """."""
         # super(BombData, self).__init__()
         self.power = power
         self.timer = timer
-        self.position = position
 
 
 class Bomb(sdl2.ext.Entity):
@@ -19,5 +18,5 @@ class Bomb(sdl2.ext.Entity):
         """."""
         self.sprite = sprite
         self.sprite.position = pos
-        self.bombdata = BombData(power, timer, pos)
-        self.velocity = Velocity()
+        self.bombdata = BombData(power, timer)
+        self.movement = Movement(pos)
