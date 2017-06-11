@@ -7,13 +7,13 @@ class Movement(object):
     def __init__(self, position):
         self.velocity = 0, 0
         self.position = position
-        self.config = game_sys.config
         
 
 class BombMovementTest(sdl2.ext.Applicator):
     def __init__(self):
         self.componenttypes = (Movement, sdl2.ext.Sprite)
         self.is_applicator = True
+        self.config = game_sys.config
 
     def process(self, world, componentsets):
         delta_time = world.delta_time
