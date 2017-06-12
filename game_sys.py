@@ -8,6 +8,7 @@ import sdl2
 import sdl2.ext
 
 from common import Color
+from bomb import BombData
 
 config = None
 
@@ -20,29 +21,6 @@ class RenderSystem(sdl2.ext.SoftwareSpriteRenderSystem):
     def render(self, components):
         sdl2.ext.fill(self.surface, Color.grass)
         super().render(components)
-
-
-class PeriodicTimer(object):
-    """Run a task at preset intervals."""
-    def __init__(self, interval, function, args):
-        self.interval = interval
-        self.function = function
-        self.args = args
-        self._timer = None
-
-    def start(self):
-        self._timer = threading.Timer(self.interval, self._execute, (self.args,))
-        self._timer.start()
-
-    def stop(self):
-        if self._timer is not None:
-            self._timer.cancel()
-            self._timer = None
-
-    def _execute(self, args):
-        self.function(*args)
-        self._timer = threading.Timer(self.interval, self._execute, (args,))
-        self._timer.start()
 
 
 class GameConfig(object):

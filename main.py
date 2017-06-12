@@ -1,18 +1,16 @@
 import sys
-import json
+import time
 
 import sdl2
 import sdl2.ext
 
 import game_sys
+import movement
 from common import Color
 from player import Player
 from wall import GenerateWalls, Wall
 from bomb import Bomb
-
-
-def game_tick(bomb):
-    bomb.sprite.position = (bomb.sprite.position[0] + 20, bomb.sprite.position[1])
+from custom_world import CustomWorld
 
 
 def main():
@@ -25,16 +23,17 @@ def main():
     window = sdl2.ext.Window(
         "Codebomber", (config.map_size[0] * Wall.size[0], config.map_size[1] * Wall.size[1]))
     window.show()
-    world = sdl2.ext.World()
-
-    # Initialize game systems and add them to world
-    render_system = game_sys.RenderSystem(window)
-    world.add_system(render_system)
+    world = CustomWorld()
 
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
 
-    game_timer = game_sys.PeriodicTimer(1, game_tick, None)
+    # Initialize game systems and add them to world
+    world.add_system(movement.BombMovementTest())
 
+    render_system = game_sys.RenderSystem(window)
+    world.add_system(render_system)
+
+    test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), None)
     running = True
     while running:
         # Event handling
@@ -56,12 +55,16 @@ def main():
                 # N pressed - generate new map
                 if event.key.keysym.sym == sdl2.SDLK_n:
                     GenerateWalls.generate_map(world, window, sprite_factory, config.number_of_players)
+                # B pressed start moving test bomb
                 if event.key.keysym.sym == sdl2.SDLK_b:
-                    test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), 0)
-                    game_timer.args = [test_bomb]
-                    game_timer.start()
+                    test_bomb.movement.velocity = 0.5, 0
+                # V pressed stop moving test bomb
                 if event.key.keysym.sym == sdl2.SDLK_v:
-                    game_timer.stop()
+                    test_bomb.movement.velocity = 0, 0
+                # C pressed reset test bomb position
+                if event.key.keysym.sym == sdl2.SDLK_c:
+                    test_bomb.movement.position = 0.0, 0.0
+                    test_bomb.sprite.position = 0, 0
 
         world.process()
 
