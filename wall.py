@@ -26,6 +26,7 @@ class Wall(sdl2.ext.Entity):
         """."""
         self.sprite = sprite
         self.sprite.position = posx, posy
+        self.sprite.depth = 0
         self.walldata = WallData(is_powerup)
 
 
