@@ -1,6 +1,6 @@
 import sdl2.ext
 
-import game_sys
+import game_sys.game_config
 
 
 class Movement(object):
@@ -13,7 +13,7 @@ class BombMovementTest(sdl2.ext.Applicator):
     def __init__(self):
         self.componenttypes = (Movement, sdl2.ext.Sprite)
         self.is_applicator = True
-        self.config = game_sys.config
+        self.config = game_sys.game_config.config
 
     def process(self, world, componentsets):
         delta_time = world.delta_time

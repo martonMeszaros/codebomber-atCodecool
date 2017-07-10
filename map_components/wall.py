@@ -120,26 +120,26 @@ class GenerateWalls(object):
 
     def __gen_powerup(world, window, sprite_factory):
         """Replace some of the remaining walls with powerups."""
-        powerup.reset_remaining_powerups()
+        map_components.powerup.reset_remaining_powerups()
         new_walls = []
 
-        while len(powerup.remaining_powerups) > 0:
+        while len(map_components.powerup.remaining_powerups) > 0:
             selected_wall = random.choice(Wall.destroyable_walls)
             Wall.destroyable_walls.remove(selected_wall)
             # Save the position of the wall
             position = selected_wall.sprite.position
             selected_wall.delete()
             # Select a powerup type from the remaining
-            powerup_type = random.choice(powerup.remaining_powerups)
-            powerup.remaining_powerups.remove(powerup_type)
+            powerup_type = random.choice(map_components.powerup.remaining_powerups)
+            map_components.powerup.remaining_powerups.remove(powerup_type)
             # Set proper sprite color - temporary
-            if powerup_type == powerup.ID_BOMBCOUNT:
+            if powerup_type == map_components.powerup.ID_BOMBCOUNT:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_bombcount, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == powerup.ID_POWER:
+            elif powerup_type == map_components.powerup.ID_POWER:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_power, (Wall.size[0], Wall.size[1]))
-            elif powerup_type == powerup.ID_SPEED:
+            elif powerup_type == map_components.powerup.ID_SPEED:
                 wall_sprite = sprite_factory.from_color(
                     Color.powerup_speed, (Wall.size[0], Wall.size[1]))
             # Create the new wall

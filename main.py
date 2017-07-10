@@ -15,7 +15,7 @@ from game_sys.custom_game_world import CustomGameWorld
 
 
 def main():
-    config = game_config.config
+    config = game_sys.game_config.config
     # Set individual class sprite sizes based on Data.sprite_size
     Wall.size = config.sprite_size
 
@@ -29,10 +29,10 @@ def main():
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
 
     # Initialize game systems and add them to world
-    world.add_system(movement.BombMovementTest())
+    world.add_system(player.movement.BombMovementTest())
 
-    renderer = render_system.RenderSystem(window)
-    world.add_system(renderer)
+    render_system = game_sys.render_system.RenderSystem(window)
+    world.add_system(render_system)
 
     test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), None)
     running = True

@@ -23,5 +23,6 @@ class GameConfig(object):
         # SDL_GetKeyName(SDL_KeyCode).decode("utf-8")
         pass
 
-if __name__ == "game_config" and config is None:
+
+if __name__ == "game_sys.game_config" and config is None:
     config = GameConfig("assets/settings.json")
