@@ -1,26 +1,8 @@
-"""System utilized by the game world.
-Might need to split into different files.
-"""
 import json
-import threading
 
 import sdl2
-import sdl2.ext
-
-from common import Color
-from bomb import BombData
 
 config = None
-
-
-class RenderSystem(sdl2.ext.SoftwareSpriteRenderSystem):
-    """Used to render every component (entity) in a world."""
-    def __init__(self, window):
-        super().__init__(window)
-
-    def render(self, components):
-        sdl2.ext.fill(self.surface, Color.grass)
-        super().render(components)
 
 
 class GameConfig(object):
@@ -41,6 +23,5 @@ class GameConfig(object):
         # SDL_GetKeyName(SDL_KeyCode).decode("utf-8")
         pass
 
-
-if __name__ == "game_sys" and config is None:
-    config = GameConfig("settings.json")
+if __name__ == "game_config" and config is None:
+    config = GameConfig("assets/settings.json")

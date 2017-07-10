@@ -7,7 +7,7 @@ class Movement(object):
     def __init__(self, position):
         self.velocity = 0, 0
         self.position = position
-        
+
 
 class BombMovementTest(sdl2.ext.Applicator):
     def __init__(self):

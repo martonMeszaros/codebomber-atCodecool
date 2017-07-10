@@ -5,8 +5,8 @@ import random
 import sdl2.ext
 
 from common import Color
-from game_sys import config
-import powerup
+from game_sys.game_config import config
+import map_components.powerup
 
 
 class WallData(object):

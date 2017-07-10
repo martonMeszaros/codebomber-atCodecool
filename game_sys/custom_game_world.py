@@ -3,9 +3,9 @@ import time
 import sdl2.ext
 
 
-class CustomWorld(sdl2.ext.World):
+class CustomGameWorld(sdl2.ext.World):
     def __init__(self):
-        super(CustomWorld, self).__init__()
+        super(CustomGameWorld, self).__init__()
         self._last_time = None
 
     def process(self):
@@ -16,4 +16,4 @@ class CustomWorld(sdl2.ext.World):
         else:
             self._last_time = time.perf_counter()
             self.delta_time = 0.0
-        super(CustomWorld, self).process()
+        super(CustomGameWorld, self).process()

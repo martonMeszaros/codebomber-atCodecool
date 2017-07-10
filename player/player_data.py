@@ -1,6 +1,3 @@
-"""."""
-import sdl2.ext
-
 import powerup
 
 
@@ -46,12 +43,3 @@ class PlayerData(object):
             self.power += PlayerData.id_power
         elif powerup_type == powerup.ID_SPEED:
             self.speed += PlayerData.id_speed
-
-
-class Player(sdl2.ext.Entity):
-    """."""
-    def __init__(self, world, sprite, pos, controls, is_ai=False):
-        """."""
-        self.sprite = sprite
-        self.sprite.position = pos
-        self.playerdata = PlayerData(controls, is_ai)

@@ -4,17 +4,18 @@ import time
 import sdl2
 import sdl2.ext
 
-import game_sys
-import movement
+import game_sys.game_config
+import game_sys.render_system
+import player.movement
 from common import Color
-from player import Player
-from wall import GenerateWalls, Wall
-from bomb import Bomb
-from custom_world import CustomWorld
+from player.player import Player
+from map_components.wall import GenerateWalls, Wall
+from bomb.bomb import Bomb
+from game_sys.custom_game_world import CustomGameWorld
 
 
 def main():
-    config = game_sys.config
+    config = game_config.config
     # Set individual class sprite sizes based on Data.sprite_size
     Wall.size = config.sprite_size
 
@@ -23,15 +24,15 @@ def main():
     window = sdl2.ext.Window(
         "Codebomber", (config.map_size[0] * Wall.size[0], config.map_size[1] * Wall.size[1]))
     window.show()
-    world = CustomWorld()
+    world = CustomGameWorld()
 
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
 
     # Initialize game systems and add them to world
     world.add_system(movement.BombMovementTest())
 
-    render_system = game_sys.RenderSystem(window)
-    world.add_system(render_system)
+    renderer = render_system.RenderSystem(window)
+    world.add_system(renderer)
 
     test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), None)
     running = True
