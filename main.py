@@ -1,5 +1,4 @@
 import sys
-import time
 
 import sdl2
 import sdl2.ext
@@ -16,8 +15,6 @@ from game_sys.custom_game_world import CustomGameWorld
 
 def main():
     config = game_sys.game_config.config
-    # Set individual class sprite sizes based on Data.sprite_size
-    Wall.size = config.sprite_size
 
     # Initialize sdl2, window, and world
     sdl2.ext.init()

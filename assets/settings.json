@@ -27,5 +27,9 @@
         "key_left": "A",
         "key_bomb": "Left Ctrl" 
     },
-    "window_size": [750, 650]
+    "window_size": [
+        800,
+        600
+    ],
+    "texture_size": 32
 }
