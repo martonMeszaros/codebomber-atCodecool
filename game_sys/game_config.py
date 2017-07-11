@@ -17,8 +17,14 @@ class GameConfig(object):
         self.map_size = (15, 13)  # This includes outer walls
         self.sprite_size = self.settings.get("texture_size"), self.settings.get("texture_size")
         self.number_of_players = 2
-        self.number_of_powerups_per_type_per_player = 3
+        self.number_of_powerups_per_type_per_player = 2
         self.number_of_random_holes = 9
+        self.player_positions = (
+            self.sprite_size,
+            ((self.map_size[0] - 2) * self.sprite_size[0], (self.map_size[1] - 2) * self.sprite_size[1]),
+            ((self.map_size[0] - 2) * self.sprite_size[0], self.sprite_size[1]),
+            (self.sprite_size[0], (self.map_size[1] - 2) * self.sprite_size[1])
+        )
 
     def save_settings(self, settings_file):
         # SDL_GetKeyName(SDL_KeyCode).decode("utf-8")
