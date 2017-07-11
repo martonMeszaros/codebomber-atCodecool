@@ -2,7 +2,7 @@
 # import sdl2
 import sdl2.ext
 
-from game_sys import config
+from game_sys.game_config import config
 
 ID_BOMBCOUNT = 1
 ID_POWER = 2
