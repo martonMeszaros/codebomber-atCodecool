@@ -14,8 +14,8 @@ class GameConfig(object):
                 for key in self.settings[player]:
                     self.settings[player][key] = sdl2.SDL_GetKeyFromName(bytes(self.settings[player][key], "utf-8"))
         self.window_size = self.settings.get("window_size")
-        self.map_size = [15, 13]  # This includes outer walls
-        self.sprite_size = (32, 32)
+        self.map_size = (15, 13)  # This includes outer walls
+        self.sprite_size = self.settings.get("texture_size"), self.settings.get("texture_size")
         self.number_of_players = 2
         self.number_of_powerups_per_type_per_player = 3
         self.number_of_random_holes = 9
