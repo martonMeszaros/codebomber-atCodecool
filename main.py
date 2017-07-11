@@ -5,11 +5,11 @@ import sdl2
 import sdl2.ext
 
 import game_sys.game_config
-import game_sys.render_system
 import player.movement
 from common import Color
 from player.player import Player
 from map_components.wall import GenerateWalls, Wall
+from map_components.floor import Floor
 from bomb.bomb import Bomb
 from game_sys.custom_game_world import CustomGameWorld
 
@@ -21,18 +21,22 @@ def main():
 
     # Initialize sdl2, window, and world
     sdl2.ext.init()
-    window = sdl2.ext.Window(
-        "Codebomber", (config.map_size[0] * Wall.size[0], config.map_size[1] * Wall.size[1]))
+    window = sdl2.ext.Window("Codebomber", config.window_size)
+    renderer = sdl2.ext.Renderer(
+        window,
+        logical_size=(config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1]),
+        flags=sdl2.SDL_RENDERER_SOFTWARE
+        )
     window.show()
     world = CustomGameWorld()
 
-    sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.SOFTWARE)
+    sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
 
     # Initialize game systems and add them to world
     world.add_system(player.movement.BombMovementTest())
 
-    render_system = game_sys.render_system.RenderSystem(window)
-    world.add_system(render_system)
+    world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))
+    Floor(world, sprite_factory.from_color(Color.grass, (config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1])))
 
     test_bomb = Bomb(world, sprite_factory.from_color(Color.black, config.sprite_size), (0, 0), None)
     running = True
@@ -52,10 +56,10 @@ def main():
                     break
                 # S pressed - generate step
                 if event.key.keysym.sym == sdl2.SDLK_s:
-                    GenerateWalls.generate_step(world, window, sprite_factory, config.number_of_players)
+                    GenerateWalls.generate_step(world, renderer, sprite_factory, config.number_of_players)
                 # N pressed - generate new map
                 if event.key.keysym.sym == sdl2.SDLK_n:
-                    GenerateWalls.generate_map(world, window, sprite_factory, config.number_of_players)
+                    GenerateWalls.generate_map(world, renderer, sprite_factory, config.number_of_players)
                 # B pressed start moving test bomb
                 if event.key.keysym.sym == sdl2.SDLK_b:
                     test_bomb.movement.velocity = 0.5, 0

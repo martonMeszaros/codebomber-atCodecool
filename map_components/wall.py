@@ -35,21 +35,21 @@ class GenerateWalls(object):
     n_of_steps = 5
     step = 1
 
-    def __gen_permawalls(world, window, sprite_factory):
+    def __gen_permawalls(world, renderer, sprite_factory):
         """Generate outer and inner walls that can't be destroyed."""
         # Compensate for coords starting with 0
         offset = 1
 
-        for y in range(0, window.size[1] // Wall.size[1]):
-            for x in range(0, window.size[0] // Wall.size[0]):
+        for y in range(0, renderer.logical_size[1] // Wall.size[1]):
+            for x in range(0, renderer.logical_size[0] // Wall.size[0]):
                 # Generate outer walls
                 if (
                         # Top most or left most walls
                         x == 0 or y == 0 or
                         # Right most walls
-                        x == window.size[0] // Wall.size[0] - offset or
+                        x == renderer.logical_size[0] // Wall.size[0] - offset or
                         # Bottom most walls
-                        y == window.size[1] // Wall.size[1] - offset):
+                        y == renderer.logical_size[1] // Wall.size[1] - offset):
                     wall_sprite = sprite_factory.from_color(
                         Color.wall_permanent, (Wall.size[0], Wall.size[1])
                     )
@@ -60,13 +60,13 @@ class GenerateWalls(object):
                         Color.wall_permanent, (Wall.size[0], Wall.size[1]))
                     Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
 
-    def __gen_wall(world, window, sprite_factory):
+    def __gen_wall(world, renderer, sprite_factory):
         """Generate destroyable walls in every blank space."""
         offset = 1
 
         # Generate wall on every empty space
-        for y in range(offset, window.size[1] // Wall.size[1] - offset):
-            for x in range(offset, window.size[0] // Wall.size[0] - offset):
+        for y in range(offset, renderer.logical_size[1] // Wall.size[1] - offset):
+            for x in range(offset, renderer.logical_size[0] // Wall.size[0] - offset):
                 if not (x % 2 == 0 and y % 2 == 0):
                     wall_sprite = sprite_factory.from_color(
                         Color.wall, (Wall.size[0], Wall.size[1]))
@@ -118,7 +118,7 @@ class GenerateWalls(object):
             Wall.destroyable_walls.remove(selected_wall)
             selected_wall.delete()
 
-    def __gen_powerup(world, window, sprite_factory):
+    def __gen_powerup(world, renderer, sprite_factory):
         """Replace some of the remaining walls with powerups."""
         map_components.powerup.reset_remaining_powerups()
         new_walls = []
@@ -149,36 +149,36 @@ class GenerateWalls(object):
         for wall in new_walls:
             Wall.destroyable_walls.append(wall)
 
-    def generate_step(world, window, sprite_factory, n_of_players=2):
+    def generate_step(world, renderer, sprite_factory, n_of_players=2):
         """Execute a single phase of map generation."""
         if GenerateWalls.step == 1:
             if len(Wall.destroyable_walls) > 0:
                 for wall in Wall.destroyable_walls:
                     wall.delete()
                 Wall.destroyable_walls = []
-            GenerateWalls.__gen_permawalls(world, window, sprite_factory)
+            GenerateWalls.__gen_permawalls(world, renderer, sprite_factory)
         elif GenerateWalls.step == 2:
-            GenerateWalls.__gen_wall(world, window, sprite_factory)
+            GenerateWalls.__gen_wall(world, renderer, sprite_factory)
         elif GenerateWalls.step == 3:
             GenerateWalls.__remove_from_playerpos(n_of_players)
         elif GenerateWalls.step == 4:
             GenerateWalls.__remove_from_random()
         elif GenerateWalls.step == 5:
-            GenerateWalls.__gen_powerup(world, window, sprite_factory)
+            GenerateWalls.__gen_powerup(world, renderer, sprite_factory)
 
         if GenerateWalls.step < GenerateWalls.n_of_steps:
             GenerateWalls.step += 1
         else:
             GenerateWalls.step = 1
 
-    def generate_map(world, window, sprite_factory, n_of_players=2):
+    def generate_map(world, renderer, sprite_factory, n_of_players=2):
         """Execute all steps of world generation."""
         for wall in Wall.destroyable_walls:
             wall.delete()
         Wall.destroyable_walls = []
-        GenerateWalls.__gen_permawalls(world, window, sprite_factory)
-        GenerateWalls.__gen_wall(world, window, sprite_factory)
+        GenerateWalls.__gen_permawalls(world, renderer, sprite_factory)
+        GenerateWalls.__gen_wall(world, renderer, sprite_factory)
         GenerateWalls.__remove_from_playerpos(n_of_players)
         GenerateWalls.__remove_from_random()
-        GenerateWalls.__gen_powerup(world, window, sprite_factory)
+        GenerateWalls.__gen_powerup(world, renderer, sprite_factory)
         GenerateWalls.step = 1

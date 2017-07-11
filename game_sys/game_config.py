@@ -13,6 +13,7 @@ class GameConfig(object):
             if self.settings.get(player) is not None:
                 for key in self.settings[player]:
                     self.settings[player][key] = sdl2.SDL_GetKeyFromName(bytes(self.settings[player][key], "utf-8"))
+        self.window_size = self.settings.get("window_size")
         self.map_size = [15, 13]  # This includes outer walls
         self.sprite_size = (32, 32)
         self.number_of_players = 2
