@@ -16,7 +16,7 @@ class BombData(object):
 
 class Bomb(sdl2.ext.Entity):
     """."""
-    def __init__(self, world, sprite, pos, power, player, timer=3000):
+    def __init__(self, world, sprite, pos, power, player, timer=3):
         """."""
         self.sprite = sprite
         self.sprite.position = pos

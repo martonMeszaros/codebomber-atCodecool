@@ -34,7 +34,6 @@ class Player(sdl2.ext.Entity):
             bombs = world.get_entities(BombData())
             valid_position = True
             for bomb in bombs:
-                print(bomb.sprite.position)
                 if bomb.sprite.position == snap_to_grid(*self.sprite.position):
                     valid_position = False
                     break
