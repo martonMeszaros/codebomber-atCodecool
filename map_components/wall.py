@@ -12,6 +12,7 @@ import map_components.powerup
 
 class WallData(object):
     """."""
+
     def __init__(self, powerup_type):
         """."""
         # super(WallData, self).__init__()
@@ -42,14 +43,11 @@ def __gen_permawalls(world, sprite_factory):
                     x == config.map_size[0] - 1 or
                     # Bottom most walls
                     y == config.map_size[1] - 1):
-                wall_sprite = sprite_factory.from_color(
-                    Color.wall_permanent, (config.sprite_size[0], config.sprite_size[1])
-                )
+                wall_sprite = sprite_factory.from_color(Color.wall_permanent, config.sprite_size)
                 Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1]))
             # Generate inner walls
             elif x % 2 == 0 and y % 2 == 0:
-                wall_sprite = sprite_factory.from_color(
-                    Color.wall_permanent, (config.sprite_size[0], config.sprite_size[1]))
+                wall_sprite = sprite_factory.from_color(Color.wall_permanent, config.sprite_size)
                 Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1]))
 
 
@@ -61,8 +59,7 @@ def __gen_wall(world, sprite_factory):
     for y in range(offset, config.map_size[1] - offset):
         for x in range(offset, config.map_size[0] - offset):
             if not (x % 2 == 0 and y % 2 == 0):
-                wall_sprite = sprite_factory.from_color(
-                    Color.wall, (config.sprite_size[0], config.sprite_size[1]))
+                wall_sprite = sprite_factory.from_color(Color.wall, config.sprite_size)
                 Wall.destroyable_walls.append(
                     Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1])))
 
@@ -124,14 +121,11 @@ def __gen_powerup(world, sprite_factory):
         map_components.powerup.remaining_powerups.remove(powerup_type)
         # Set proper sprite color - temporary
         if powerup_type == map_components.powerup.ID_BOMBCOUNT:
-            wall_sprite = sprite_factory.from_color(
-                Color.powerup_bombcount, (config.sprite_size[0], config.sprite_size[1]))
+            wall_sprite = sprite_factory.from_color(Color.powerup_bombcount, config.sprite_size)
         elif powerup_type == map_components.powerup.ID_POWER:
-            wall_sprite = sprite_factory.from_color(
-                Color.powerup_power, (config.sprite_size[0], config.sprite_size[1]))
+            wall_sprite = sprite_factory.from_color(Color.powerup_power, config.sprite_size)
         elif powerup_type == map_components.powerup.ID_SPEED:
-            wall_sprite = sprite_factory.from_color(
-                Color.powerup_speed, (config.sprite_size[0], config.sprite_size[1]))
+            wall_sprite = sprite_factory.from_color(Color.powerup_speed, config.sprite_size)
         # Create the new wall
         new_walls.append(
             Wall(world, wall_sprite, position, powerup_type))
