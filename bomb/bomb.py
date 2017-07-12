@@ -20,5 +20,5 @@ class Bomb(sdl2.ext.Entity):
         """."""
         self.sprite = sprite
         self.sprite.position = pos
-        self.sprite.depth = 1
+        self.sprite.depth = 2
         self.bombdata = BombData(power, timer, player)

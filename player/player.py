@@ -16,7 +16,7 @@ class Player(sdl2.ext.Entity):
     def __init__(self, world, sprite, is_ai=False):
         """."""
         self.sprite = sprite
-        self.sprite.depth = 2
+        self.sprite.depth = 3
         self.playerdata = PlayerData(is_ai)
         self.sprite.position = get_starting_position(self.playerdata.number)
         self.movement = game_sys.movement.Movement(get_starting_position(self.playerdata.number))
