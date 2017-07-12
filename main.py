@@ -4,6 +4,7 @@ import sdl2
 import sdl2.ext
 
 import game_sys.game_config
+from game_sys.grid_coordinates import get_map_size
 import player.movement
 from common import Color
 from player.player import Player
@@ -19,7 +20,7 @@ def init(config):
     window = sdl2.ext.Window("Codebomber", config.window_size)
     renderer = sdl2.ext.Renderer(
         window,
-        logical_size=(config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1]),
+        logical_size=get_map_size(),
         flags=sdl2.SDL_RENDERER_SOFTWARE
         )
     window.show()
@@ -30,8 +31,8 @@ def init(config):
     # Initialize game systems and add them to world
     world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))
 
-    Floor(world, sprite_factory.from_color(Color.grass, (config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1])))
-    __gen_permawalls(world, renderer, sprite_factory)
+    Floor(world, sprite_factory.from_color(Color.grass, get_map_size()))
+    __gen_permawalls(world, sprite_factory)
 
     return window, world, sprite_factory, renderer
 
@@ -62,7 +63,7 @@ def main():
                     break
                 # N pressed - generate new map
                 if event.key.keysym.sym == sdl2.SDLK_n:
-                    generate_map(world, renderer, sprite_factory, config.number_of_players)
+                    generate_map(world, sprite_factory, config.number_of_players)
                 # B pressed start moving test bomb
                 if event.key.keysym.sym == sdl2.SDLK_b:
                     test_bomb.movement.velocity = 0.5, 0
