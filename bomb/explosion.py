@@ -23,7 +23,22 @@ class Explosion(sdl2.ext.Entity):
     """."""
     def __init__(self, world, sprite_factory, pos, power, direction=DIR_ALL):
         """."""
-        self.sprite = sprite_factory.from_color(Color.exploseion, config.sprite_size)
+        if direction == DIR_ALL:
+            filename = "assets/explosion_cross.png"
+        elif power > 0:
+            if direction in (DIR_UP, DIR_DOWN):
+                filename = "assets/explosion_vertical.png"
+            else:
+                filename = "assets/explosion_horizontal.png"
+        elif direction == DIR_UP:
+                filename = "assets/explosion_top.png"
+        elif direction == DIR_RIGHT:
+                filename = "assets/explosion_right.png"
+        elif direction == DIR_DOWN:
+                filename = "assets/explosion_bottom.png"
+        elif direction == DIR_LEFT:
+                filename = "assets/explosion_left.png"
+        self.sprite = sprite_factory.from_image(filename)
         self.sprite.position = pos
         self.sprite.depth = 1
         self.explosiondata = ExplosionData()

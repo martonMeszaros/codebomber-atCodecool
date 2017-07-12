@@ -40,7 +40,7 @@ class Player(sdl2.ext.Entity):
             if valid_position:
                 self.playerdata.bombs_placed += 1
                 Bomb(world,
-                     sprite_factory.from_color(Color.black, config.sprite_size),
+                     sprite_factory.from_image("assets/bomb.png"),
                      snap_to_grid(*self.sprite.position),
                      self.playerdata.power,
                      self)
