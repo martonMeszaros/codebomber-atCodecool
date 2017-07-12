@@ -16,3 +16,4 @@ class Color(object):
     powerup_speed = sdl2.ext.Color(3, 169, 244)     # Light Blue 500
     wall = sdl2.ext.Color(189, 189, 189)            # Grey 400
     wall_permanent = sdl2.ext.Color(117, 117, 117)  # Grey 600
+    exploseion = sdl2.ext.Color(225, 0, 0)          # Crimson

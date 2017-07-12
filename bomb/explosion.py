@@ -1,25 +1,70 @@
 """."""
 import sdl2.ext
 
+from common import Color
+from game_sys.game_config import config
+from game_sys.movement import DIR_UP, DIR_RIGHT, DIR_DOWN, DIR_LEFT
+
+DIR_ALL = 4
+
 
 class ExplosionData(object):
     """."""
-    def __init__(self, power, direction):
+    def __init__(self):
         """."""
-        # super(ExplosionData, self).__init__()
-        self.power = power
-        self.direction = direction
+        # Explosion should stay for 0.5 seconds
+        self.fallout = 0.5
+
+    def __eq__(self, other):
+        return isinstance(other, ExplosionData)
 
 
 class Explosion(sdl2.ext.Entity):
     """."""
-    dir_up = 0
-    dir_right = 1
-    dir_down = 2
-    dir_left = 3
-
-    def __init__(self, sprite, pos, power, direction):
+    def __init__(self, world, sprite_factory, pos, power, direction=DIR_ALL):
         """."""
-        self.sprite = sprite
+        self.sprite = sprite_factory.from_color(Color.exploseion, config.sprite_size)
         self.sprite.position = pos
-        self.explosiondata = ExplosionData(power, direction)
+        self.sprite.depth = 1
+        self.explosiondata = ExplosionData()
+        if power > 0:
+            if direction == DIR_ALL:
+                Explosion(
+                    world, sprite_factory,
+                    (pos[0], pos[1] - config.sprite_size[1]),
+                    power - 1,
+                    DIR_UP
+                )
+                Explosion(
+                    world, sprite_factory,
+                    (pos[0] + config.sprite_size[0], pos[1]),
+                    power - 1,
+                    DIR_RIGHT
+                )
+                Explosion(
+                    world, sprite_factory,
+                    (pos[0], pos[1] + config.sprite_size[1]),
+                    power - 1,
+                    DIR_DOWN
+                )
+                Explosion(
+                    world, sprite_factory,
+                    (pos[0] - config.sprite_size[0], pos[1]),
+                    power - 1,
+                    DIR_LEFT
+                )
+            else:
+                if direction == DIR_UP:
+                    new_pos = (pos[0], pos[1] - config.sprite_size[1])
+                elif direction == DIR_RIGHT:
+                    new_pos = (pos[0] + config.sprite_size[0], pos[1])
+                elif direction == DIR_DOWN:
+                    new_pos = (pos[0], pos[1] + config.sprite_size[1])
+                elif direction == DIR_LEFT:
+                    new_pos = (pos[0] - config.sprite_size[0], pos[1])
+                Explosion(
+                    world, sprite_factory,
+                    new_pos,
+                    power - 1,
+                    direction
+                )

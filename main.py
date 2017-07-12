@@ -11,6 +11,7 @@ from map_components.map_setup import gen_permawalls, generate_map
 from map_components.floor import Floor
 from bomb.bomb import Bomb
 from game_sys.custom_game_world import CustomGameWorld
+from game_sys.bomb_timer import BombTimer, ExplosionTimer
 
 
 def init(config):
@@ -29,6 +30,8 @@ def init(config):
 
     # Initialize game systems and add them to world
     world.add_system(game_sys.movement.PlayerMovement())
+    world.add_system(BombTimer(sprite_factory))
+    world.add_system(ExplosionTimer())
     world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))
 
     Floor(world, sprite_factory.from_color(Color.grass, get_map_size()))
