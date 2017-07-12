@@ -4,6 +4,7 @@ import sdl2
 import sdl2.ext
 
 import game_sys.game_config
+from game_sys.grid_coordinates import get_map_size
 import player.movement
 from common import Color
 from player.player import Player
@@ -19,7 +20,7 @@ def init(config):
     window = sdl2.ext.Window("Codebomber", config.window_size)
     renderer = sdl2.ext.Renderer(
         window,
-        logical_size=(config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1]),
+        logical_size=get_map_size(),
         flags=sdl2.SDL_RENDERER_SOFTWARE
         )
     window.show()
@@ -31,9 +32,9 @@ def init(config):
     world.add_system(player.movement.PlayerMovement())
     world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))
 
-    Floor(world, sprite_factory.from_color(Color.grass, (config.map_size[0] * config.sprite_size[0], config.map_size[1] * config.sprite_size[1])))
-    __gen_permawalls(world, renderer, sprite_factory)
-    generate_map(world, renderer, sprite_factory, config.number_of_players)
+    Floor(world, sprite_factory.from_color(Color.grass, get_map_size()))
+    __gen_permawalls(world, sprite_factory)
+    generate_map(world, sprite_factory, config.number_of_players)
     players = list()
     for _ in range(config.number_of_players):
         players.append(Player(world, sprite_factory.from_color(Color.player, config.sprite_size)))
