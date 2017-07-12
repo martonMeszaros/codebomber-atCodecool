@@ -1,5 +1,5 @@
 from game_sys.game_config import config
-import player.movement as movement
+import game_sys.movement as movement
 
 
 class Controls(object):

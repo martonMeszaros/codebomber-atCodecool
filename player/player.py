@@ -1,11 +1,11 @@
 """."""
 import sdl2.ext
 
-import player.movement
+import game_sys.movement
 from player.player_data import PlayerData
 from game_sys.game_config import config
 from game_sys.grid_coordinates import grid_pos
-from player.controls import Controls
+from game_sys.controls import Controls
 
 
 class Player(sdl2.ext.Entity):
@@ -16,7 +16,7 @@ class Player(sdl2.ext.Entity):
         self.sprite.depth = 2
         self.playerdata = PlayerData(is_ai)
         self.sprite.position = get_starting_position(self.playerdata.number)
-        self.movement = player.movement.Movement(get_starting_position(self.playerdata.number))
+        self.movement = game_sys.movement.Movement(get_starting_position(self.playerdata.number))
         self.controls = Controls(self.playerdata.number)
 
     def movement_pressed(self, key):

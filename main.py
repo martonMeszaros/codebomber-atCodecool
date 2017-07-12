@@ -5,10 +5,9 @@ import sdl2.ext
 
 import game_sys.game_config
 from game_sys.grid_coordinates import get_map_size
-import player.movement
 from common import Color
 from player.player import Player
-from map_components.wall import Wall, __gen_permawalls, generate_map
+from map_components.map_setup import gen_permawalls, generate_map
 from map_components.floor import Floor
 from bomb.bomb import Bomb
 from game_sys.custom_game_world import CustomGameWorld
@@ -29,11 +28,11 @@ def init(config):
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
 
     # Initialize game systems and add them to world
-    world.add_system(player.movement.PlayerMovement())
+    world.add_system(game_sys.movement.PlayerMovement())
     world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))
 
     Floor(world, sprite_factory.from_color(Color.grass, get_map_size()))
-    __gen_permawalls(world, sprite_factory)
+    gen_permawalls(world, sprite_factory)
     generate_map(world, sprite_factory, config.number_of_players)
     players = list()
     for _ in range(config.number_of_players):

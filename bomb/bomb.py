@@ -1,6 +1,5 @@
 """."""
 import sdl2.ext
-from player.movement import Movement
 
 
 class BombData(object):
