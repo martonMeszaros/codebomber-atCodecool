@@ -15,9 +15,9 @@ def grid_pos(grid_x, grid_y):
     return pos_x, pos_y
 
 
-def snap_top_grid(pos_x, pos_y):
-    grid_x = round(get_map_size()[0] / pos_x)
-    grid_y = round(get_map_size()[1] / pos_y)
+def snap_to_grid(pos_x, pos_y):
+    grid_x = round(pos_x / config.sprite_size[0])
+    grid_y = round(pos_y / config.sprite_size[1])
     return grid_pos(grid_x, grid_y)
 
 

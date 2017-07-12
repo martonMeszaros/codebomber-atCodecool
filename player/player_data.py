@@ -1,8 +1,8 @@
-import powerup
+import map_components.powerup
 
-BASE_BOMBCOUNT = 1
+BASE_BOMBCOUNT = 2
 BASE_POWER = 2
-BASE_SPEED = 1
+BASE_SPEED = 4
 POWERUP_BOMBCOUNT = 1
 POWERUP_POWER = 1
 POWERUP_SPEED = 1
@@ -16,15 +16,15 @@ class PlayerData(object):
     The variable naming convention may need to be reworked.
     """
 
-    def __init__(self, controls, is_ai):
+    def __init__(self, is_ai):
         # The commented out line is used in the pong tutorial, not sure why.
         # super(PlayerData, self).__init__()
-        self.controls = controls
+        global player_number
 
-        self.bombcount = PlayerData.base_bombcount
+        self.bombcount = BASE_BOMBCOUNT
         self.bombs_placed = 0
-        self.power = PlayerData.base_power
-        self.speed = PlayerData.base_speed
+        self.power = BASE_POWER
+        self.speed = BASE_SPEED
 
         self.is_ai = is_ai
         self.number = player_number
