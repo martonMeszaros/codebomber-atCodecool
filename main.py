@@ -39,7 +39,7 @@ def init(config):
     generate_map(world, sprite_factory, config.number_of_players)
     players = list()
     for _ in range(config.number_of_players):
-        players.append(Player(world, sprite_factory.from_color(Color.player, config.sprite_size)))
+        players.append(Player(world, sprite_factory.from_image("assets/player.png")))
 
     return window, world, sprite_factory, renderer, players
 
