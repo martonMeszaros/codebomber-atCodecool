@@ -1,6 +1,6 @@
 import map_components.powerup
 
-BASE_BOMBCOUNT = 1
+BASE_BOMBCOUNT = 2
 BASE_POWER = 2
 BASE_SPEED = 4
 POWERUP_BOMBCOUNT = 1

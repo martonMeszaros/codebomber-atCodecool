@@ -71,7 +71,7 @@ def main():
                     break
                 for player in players:
                     if key == player.controls.bomb_placement:
-                        player.place_bomb()
+                        player.place_bomb(world, sprite_factory)
                     elif key in player.controls.movement:
                         player.movement_released(key)
 
