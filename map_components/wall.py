@@ -6,6 +6,7 @@ import sdl2.ext
 
 from common import Color
 from game_sys.game_config import config
+from game_sys.grid_coordinates import grid_pos, get_map_size
 import map_components.powerup
 
 
@@ -19,52 +20,51 @@ class WallData(object):
 
 class Wall(sdl2.ext.Entity):
     """."""
-    size = config.sprite_size
     destroyable_walls = []
 
-    def __init__(self, world, sprite, posx=0, posy=0, powerup_type=None):
+    def __init__(self, world, sprite, position, powerup_type=None):
         """."""
         self.sprite = sprite
-        self.sprite.position = posx, posy
+        self.sprite.position = position
         self.sprite.depth = 0
         self.walldata = WallData(powerup_type)
 
 
-def __gen_permawalls(world, renderer, sprite_factory):
+def __gen_permawalls(world, sprite_factory):
     """Generate outer and inner walls that can't be destroyed."""
-    for y in range(0, renderer.logical_size[1] // Wall.size[1]):
-        for x in range(0, renderer.logical_size[0] // Wall.size[0]):
+    for y in range(config.map_size[1]):
+        for x in range(config.map_size[0]):
             # Generate outer walls
             if (
                     # Top most or left most walls
                     x == 0 or y == 0 or
                     # Right most walls
-                    x == renderer.logical_size[0] // Wall.size[0] - 1 or
+                    x == config.map_size[0] - 1 or
                     # Bottom most walls
-                    y == renderer.logical_size[1] // Wall.size[1] - 1):
+                    y == config.map_size[1] - 1):
                 wall_sprite = sprite_factory.from_color(
-                    Color.wall_permanent, (Wall.size[0], Wall.size[1])
+                    Color.wall_permanent, (config.sprite_size[0], config.sprite_size[1])
                 )
-                Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
+                Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1]))
             # Generate inner walls
             elif x % 2 == 0 and y % 2 == 0:
                 wall_sprite = sprite_factory.from_color(
-                    Color.wall_permanent, (Wall.size[0], Wall.size[1]))
-                Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1])
+                    Color.wall_permanent, (config.sprite_size[0], config.sprite_size[1]))
+                Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1]))
 
 
-def __gen_wall(world, renderer, sprite_factory):
+def __gen_wall(world, sprite_factory):
     """Generate destroyable walls in every blank space."""
     offset = 1
 
     # Generate wall on every empty space
-    for y in range(offset, renderer.logical_size[1] // Wall.size[1] - offset):
-        for x in range(offset, renderer.logical_size[0] // Wall.size[0] - offset):
+    for y in range(offset, config.map_size[1] - offset):
+        for x in range(offset, config.map_size[0] - offset):
             if not (x % 2 == 0 and y % 2 == 0):
                 wall_sprite = sprite_factory.from_color(
-                    Color.wall, (Wall.size[0], Wall.size[1]))
+                    Color.wall, (config.sprite_size[0], config.sprite_size[1]))
                 Wall.destroyable_walls.append(
-                    Wall(world, wall_sprite, x * Wall.size[0], y * Wall.size[1]))
+                    Wall(world, wall_sprite, (x * config.sprite_size[0], y * config.sprite_size[1])))
 
 
 def __remove_from_playerpos(n_of_players):
@@ -73,27 +73,21 @@ def __remove_from_playerpos(n_of_players):
     # Should be made scalable with different size of map layouts.
     offset = 2
     playerpos = [
-        (1 * Wall.size[0], 1 * Wall.size[1]),
-        (1 * Wall.size[0], 2 * Wall.size[1]),
-        (2 * Wall.size[0], 1 * Wall.size[1]),
-        ((config.map_size[0] - offset) * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]),
-        ((config.map_size[0] - offset) * Wall.size[0], (config.map_size[1] - offset - 1) * Wall.size[1]),
-        ((config.map_size[0] - offset - 1) * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]),
+        grid_pos(1, 1),
+        grid_pos(1, 2),
+        grid_pos(2, 1),
+        grid_pos(config.map_size[0] - offset, config.map_size[1] - offset),
+        grid_pos(config.map_size[0] - offset, config.map_size[1] - offset - 1),
+        grid_pos(config.map_size[0] - offset - 1, config.map_size[1] - offset)
     ]
     if n_of_players > 2:
-        playerpos.append(
-            ((config.map_size[0] - offset) * Wall.size[0], 1 * Wall.size[1]))
-        playerpos.append(
-            ((config.map_size[0] - offset) * Wall.size[0], 2 * Wall.size[1]))
-        playerpos.append(
-            ((config.map_size[0] - offset - 1) * Wall.size[0], 1 * Wall.size[1]))
+        playerpos.append(grid_pos(config.map_size[0] - offset, 1))
+        playerpos.append(grid_pos(config.map_size[0] - offset, 2))
+        playerpos.append(grid_pos(config.map_size[0] - offset - 1, 1))
         if n_of_players > 3:
-            playerpos.append(
-                (1 * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]))
-            playerpos.append(
-                (1 * Wall.size[0], (config.map_size[1] - offset - 1) * Wall.size[1]))
-            playerpos.append(
-                (2 * Wall.size[0], (config.map_size[1] - offset) * Wall.size[1]))
+            playerpos.append(grid_pos(1, config.map_size[1] - offset))
+            playerpos.append(grid_pos(2, config.map_size[1] - offset))
+            playerpos.append(grid_pos(1, config.map_size[1] - offset - 1))
 
     walls_to_remove = []
     # Check wall positions in Wall.destroyable_walls
@@ -114,7 +108,7 @@ def __remove_from_random():
         selected_wall.delete()
 
 
-def __gen_powerup(world, renderer, sprite_factory):
+def __gen_powerup(world, sprite_factory):
     """Replace some of the remaining walls with powerups."""
     map_components.powerup.reset_remaining_powerups()
     new_walls = []
@@ -131,27 +125,27 @@ def __gen_powerup(world, renderer, sprite_factory):
         # Set proper sprite color - temporary
         if powerup_type == map_components.powerup.ID_BOMBCOUNT:
             wall_sprite = sprite_factory.from_color(
-                Color.powerup_bombcount, (Wall.size[0], Wall.size[1]))
+                Color.powerup_bombcount, (config.sprite_size[0], config.sprite_size[1]))
         elif powerup_type == map_components.powerup.ID_POWER:
             wall_sprite = sprite_factory.from_color(
-                Color.powerup_power, (Wall.size[0], Wall.size[1]))
+                Color.powerup_power, (config.sprite_size[0], config.sprite_size[1]))
         elif powerup_type == map_components.powerup.ID_SPEED:
             wall_sprite = sprite_factory.from_color(
-                Color.powerup_speed, (Wall.size[0], Wall.size[1]))
+                Color.powerup_speed, (config.sprite_size[0], config.sprite_size[1]))
         # Create the new wall
         new_walls.append(
-            Wall(world, wall_sprite, position[0], position[1], powerup_type))
+            Wall(world, wall_sprite, position, powerup_type))
 
     for wall in new_walls:
         Wall.destroyable_walls.append(wall)
 
 
-def generate_map(world, renderer, sprite_factory, n_of_players=2):
+def generate_map(world, sprite_factory, n_of_players=2):
     """Execute all steps of world generation."""
     for wall in Wall.destroyable_walls:
         wall.delete()
     Wall.destroyable_walls = []
-    __gen_wall(world, renderer, sprite_factory)
+    __gen_wall(world, sprite_factory)
     __remove_from_playerpos(n_of_players)
     __remove_from_random()
-    __gen_powerup(world, renderer, sprite_factory)
+    __gen_powerup(world, sprite_factory)
