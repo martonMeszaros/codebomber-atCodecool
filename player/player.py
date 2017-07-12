@@ -45,6 +45,11 @@ class Player(sdl2.ext.Entity):
                      self.playerdata.power,
                      self)
 
+    def get_powerups(self):
+        self.playerdata.bombcount += 1
+        self.playerdata.power += 1
+        self.playerdata.speed -= 1
+
 
 def get_starting_position(player_number):
     if player_number == 1:

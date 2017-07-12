@@ -77,6 +77,9 @@ def main():
                         player.place_bomb(world, sprite_factory)
                     elif key in player.controls.movement:
                         player.movement_released(key)
+                if key == sdl2.SDLK_0:
+                    for player in players:
+                        player.get_powerups()
 
         world.process()
 
