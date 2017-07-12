@@ -15,7 +15,7 @@ DIR_VELOCITY_TARGET = (
     (0, 1),
     (-1, 0)
 )
-ACCELERATION_DIVIDER = 50
+ACCELERATION_DIVIDER = 0.15
 
 
 class Movement(object):
@@ -45,7 +45,7 @@ class PlayerMovement(sdl2.ext.Applicator):
                 target_velocity[0] - movement.velocity[0],
                 target_velocity[1] - movement.velocity[1]
             ]
-            max_velocity_step = player_data.speed / ACCELERATION_DIVIDER
+            max_velocity_step = player_data.speed / ACCELERATION_DIVIDER * delta_time
             if math.fabs(velocity_delta[0]) > max_velocity_step:
                 velocity_delta[0] = math.copysign(max_velocity_step, velocity_delta[0])
             if math.fabs(velocity_delta[1]) > max_velocity_step:
