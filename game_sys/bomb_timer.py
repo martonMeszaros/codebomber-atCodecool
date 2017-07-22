@@ -35,7 +35,8 @@ class ExplosionTimer(sdl2.ext.Applicator):
             explosion_data.fallout -= delta_time
             if explosion_data.fallout <= 0:
                 explosions = world.get_entities(explosion_data)
+                id_to_delete = id(sprite)
                 for explosion in explosions:
-                    if explosion.sprite.position == sprite.position:
+                    if id(explosion.sprite) == id_to_delete:
                         explosion.delete()
                         break

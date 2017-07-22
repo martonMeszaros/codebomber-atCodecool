@@ -9,6 +9,9 @@ class WallData(object):
         # super(WallData, self).__init__()
         self.powerup_type = powerup_type
 
+    def __eq__(self, other):
+        return isinstance(other, WallData)
+
 
 class Wall(sdl2.ext.Entity):
     """."""
