@@ -2,12 +2,13 @@
 import sdl2.ext
 
 import game_sys.movement
+from game_sys.collision.circle_collision_mesh import CircleMesh
+from game_sys.collision.complex_collision_mesh import ComplexMesh
 from player.player_data import PlayerData
 from game_sys.game_config import config
 from game_sys.grid_coordinates import grid_pos, snap_to_grid
 from game_sys.controls import Controls
 from bomb.bomb import BombData, Bomb
-from common import Color
 
 
 class Player(sdl2.ext.Entity):
@@ -21,6 +22,10 @@ class Player(sdl2.ext.Entity):
         self.sprite.position = get_starting_position(self.playerdata.number)
         self.movement = game_sys.movement.Movement(get_starting_position(self.playerdata.number))
         self.controls = Controls(self.playerdata.number)
+        self.complexmesh = ComplexMesh()
+        self.complexmesh.add_mesh(CircleMesh(16, 16, 9))
+        self.complexmesh.add_mesh(CircleMesh(10, 20, 5))
+        self.complexmesh.add_mesh(CircleMesh(21, 20, 5))
 
     def movement_pressed(self, key):
         if self.controls.movement[key] not in self.movement.active_directions:

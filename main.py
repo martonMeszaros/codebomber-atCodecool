@@ -4,14 +4,15 @@ import sdl2
 import sdl2.ext
 
 import game_sys.game_config
+from game_sys.collision.collider import Collider
 from game_sys.grid_coordinates import get_map_size
-from common import Color
-from player.player import Player
-from map_components.map_setup import gen_permawalls, generate_map
-from map_components.floor import Floor
-from bomb.bomb import Bomb
 from game_sys.custom_game_world import CustomGameWorld
 from game_sys.bomb_timer import BombTimer, ExplosionTimer
+from game_sys.movement import PlayerMovement
+from map_components.map_setup import gen_permawalls, generate_map
+from map_components.floor import Floor
+from player.player import Player
+from common import Color
 
 
 def init(config):
@@ -29,7 +30,8 @@ def init(config):
     sprite_factory = sdl2.ext.SpriteFactory(sdl2.ext.TEXTURE, renderer=renderer)
 
     # Initialize game systems and add them to world
-    world.add_system(game_sys.movement.PlayerMovement())
+    world.add_system(PlayerMovement())
+    world.add_system(Collider())
     world.add_system(BombTimer(sprite_factory))
     world.add_system(ExplosionTimer())
     world.add_system(sdl2.ext.TextureSpriteRenderSystem(renderer))

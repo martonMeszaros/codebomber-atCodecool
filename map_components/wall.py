@@ -1,4 +1,7 @@
 import sdl2.ext
+from game_sys.game_config import config
+from game_sys.collision.complex_collision_mesh import ComplexMesh
+from game_sys.collision.rectangle_collision_mesh import RectangleMesh
 
 
 class WallData(object):
@@ -20,3 +23,5 @@ class Wall(sdl2.ext.Entity):
         self.sprite.position = position
         self.sprite.depth = 0
         self.walldata = WallData(powerup_type)
+        self.complexmesh = ComplexMesh()
+        self.complexmesh.add_mesh(RectangleMesh(0, 0, *config.sprite_size))
